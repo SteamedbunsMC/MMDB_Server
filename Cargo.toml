@@ -1,0 +1,18 @@
+[package]
+name = "MMDB_Server"
+version = "0.1.2"
+edition = "2021"
+license = "MIT"
+authors = ["Lucas Maar steamedbunsmc@steamedbunsmc.onmicrosoft.com"]
+description = "{InDev} A simple,easy to use database server."
+readme = "readme.md"
+categories = ["database-implementations","authentication","caching","command-line-utilities","data-structures"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+threadpool = "1.8.1"
+configster = "0.1.1"
+
+[[bin]]
+name = "mmdbserver"

@@ -1,0 +1,4 @@
+DatabaseFile = ./db.mmdb
+Password = 98yegd9a8yfgoesiuhbdxds
+MaxThreads = 20
+InfniteThreads = false
