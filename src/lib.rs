@@ -300,7 +300,7 @@ pub mod servermain {
                                     if BUF.starts_with("MMDB/0.1.0/CLIENT PASSWORD -KEEP-ALIVE- /PASSWORD CRYPTED:") {
                                         if BUF == (&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD").unwrap().to_string() {
                                             writer.write_all(crypt("MMDB/0.1.0/SERVER ACCEPT -KEEP-ALIVE- /ACCEPT VERIFY -HEADER- /".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
-                                            writer.flush();
+                                            writer.flush(); 
                                         }
                                         else{
                                             writer.write_all(crypt("MMDB/0.1.0/SERVER FORBIDDEN -TERMINATE- /STOP..WRONG_PASSWORD".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
