@@ -237,11 +237,11 @@ pub mod servermain {
             databases.insert(
                 decrypt(
                     i.split('V').clone().collect::<Vec<&str>>()[0].to_string(),
-                    configs.get("Password").unwrap().to_string(),
+                    configs.get("PASSWORD").unwrap().to_string(),
                 ),
                 decrypt(
                     i.split('V').collect::<Vec<&str>>()[1].to_string(),
-                    configs.get("Password").unwrap().to_string(),
+                    configs.get("PASSWORD").unwrap().to_string(),
                 ),
             );
         }
@@ -250,7 +250,7 @@ pub mod servermain {
             databases.insert(
                 "PASSWORD".into(),
                 "MMDB/0.1.0/CLIENT PASSWORD -KEEP-ALIVE- /PASSWORD CRYPTED:".to_string()
-                    + &crypt(configs.get("Password").unwrap().to_string(),"MMDB/0.1.0/DEFAULT PASSWORD CRYPTER -O4UHRWO3IT4UY4WOTIUEHRILEUDSD-  /DEFAULT/".to_string()),
+                    + &crypt(configs.get("PASSWORD").unwrap().to_string(),"MMDB/0.1.0/DEFAULT PASSWORD CRYPTER -O4UHRWO3IT4UY4WOTIUEHRILEUDSD-  /DEFAULT/".to_string()),
             );
         }
 
@@ -261,7 +261,7 @@ pub mod servermain {
                 as usize,
         );
 
-        let mut key = configs.get("Password").unwrap().to_string();
+        let mut key = configs.get("PASSWORD").unwrap().to_string();
 
         let (send, receive) = std::sync::mpsc::channel::<messageprotocol>();
         let receiver_ = Arc::new(Mutex::new(receive));
@@ -291,41 +291,41 @@ pub mod servermain {
                                     let mut writer = BufWriter::new(&mut * stream);
                                     let mut BUF = String::new();
                                     reader.read_to_string(&mut BUF);
-                                    BUF = decrypt(BUF,((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string());
+                                    BUF = decrypt(BUF,((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string());
                                     if BUF != "MMDB/0.1.0/CLIENT CONNECT -KEEP-ALIVE- /ASK FOR CONNECT" {continue;}
-                                    writer.write_all(crypt("MMDB/0.1.0/SERVER ACCEPT -KEEP-ALIVE- /ACCEPT CONNECT -HEADER- /ASK FOR PASSWORD".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string()).as_bytes());
+                                    writer.write_all(crypt("MMDB/0.1.0/SERVER ACCEPT -KEEP-ALIVE- /ACCEPT CONNECT -HEADER- /ASK FOR PASSWORD".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
                                     writer.flush();
                                     reader.read_to_string(&mut BUF);
-                                    BUF = decrypt(BUF,((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string());
+                                    BUF = decrypt(BUF,((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string());
                                     if BUF.starts_with("MMDB/0.1.0/CLIENT PASSWORD -KEEP-ALIVE- /PASSWORD CRYPTED:") {
                                         if BUF == (&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD").unwrap().to_string() {
-                                            writer.write_all(crypt("MMDB/0.1.0/SERVER ACCEPT -KEEP-ALIVE- /ACCEPT VERIFY -HEADER- /".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string()).as_bytes());
+                                            writer.write_all(crypt("MMDB/0.1.0/SERVER ACCEPT -KEEP-ALIVE- /ACCEPT VERIFY -HEADER- /".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
                                             writer.flush();
                                         }
                                         else{
-                                            writer.write_all(crypt("MMDB/0.1.0/SERVER FORBIDDEN -TERMINATE- /STOP..WRONG_PASSWORD".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string()).as_bytes());
+                                            writer.write_all(crypt("MMDB/0.1.0/SERVER FORBIDDEN -TERMINATE- /STOP..WRONG_PASSWORD".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
                                             writer.flush();
                                             continue;
                                         }
                                     }
                                     else{
-                                        writer.write_all(crypt("MMDB/0.1.0/SERVER FORBIDDEN -TERMINATE- /STOP..UNVERIFIED_CONNECTION".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string()).as_bytes());
+                                        writer.write_all(crypt("MMDB/0.1.0/SERVER FORBIDDEN -TERMINATE- /STOP..UNVERIFIED_CONNECTION".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
                                         writer.flush();
                                         continue;
                                     }
                                     loop {
                                         reader.read_to_string(&mut BUF);
-                                        BUF = decrypt(BUF,((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string());
+                                        BUF = decrypt(BUF,((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string());
                                         if BUF.starts_with("MMDB/0.1.0/CLIENT GET -KEEP-ALIVE- /ASK FOR VAL..KEY:") {
                                             let mut iter = BUF.split(':');
                                             let _ = iter.next();
                                             match (&mut * (&mut * databases.lock().unwrap()).in_cell).get(iter.next().unwrap()) {
                                                 Some(res) => {
-                                                    writer.write_all(crypt((format!("MMDB/0.1.0/SERVER ACCEPT -KEEP-ALIVE- /ANS FOR ASKING VAL..VAL:{}",res)).to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string()).as_bytes());
+                                                    writer.write_all(crypt((format!("MMDB/0.1.0/SERVER ACCEPT -KEEP-ALIVE- /ANS FOR ASKING VAL..VAL:{}",res)).to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
                                                     writer.flush();
                                                 }
                                                 None => {
-                                                    writer.write_all(crypt("MMDB/0.1.0/SERVER NOT FOUND -KEEP-ALIVE- /ANS FOR ASKING VAL..NOT FOUND".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string()).as_bytes());
+                                                    writer.write_all(crypt("MMDB/0.1.0/SERVER NOT FOUND -KEEP-ALIVE- /ANS FOR ASKING VAL..NOT FOUND".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
                                                     writer.flush();
                                                 }
                                             }
@@ -342,11 +342,11 @@ pub mod servermain {
                                             else{
                                                 (&mut * (&mut * databases.lock().unwrap()).in_cell).insert(iter2.next().unwrap().to_string(),iter2.next().unwrap().to_string());
                                             }
-                                            writer.write_all(crypt("MMDB/0.1.0/SERVER ACCEPT -KEEP-ALIVE- /ANSWER FOR ASKING SET KV PAIRS..OK".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string()).as_bytes());
+                                            writer.write_all(crypt("MMDB/0.1.0/SERVER ACCEPT -KEEP-ALIVE- /ANSWER FOR ASKING SET KV PAIRS..OK".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
                                             writer.flush();
                                         }
                                         else if BUF.starts_with("MMDB/0.1.0/CLIENT DISCONNECT -KEEP-ALIVE- /DISCONNECT") {
-                                            writer.write_all(crypt("MMDB/0.1.0/SERVER DISCONNECT -DISCONNECT- /DISCONNECT".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string()).as_bytes());
+                                            writer.write_all(crypt("MMDB/0.1.0/SERVER DISCONNECT -DISCONNECT- /DISCONNECT".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
                                             writer.flush();
                                             break;
                                         }
@@ -363,7 +363,7 @@ pub mod servermain {
                                             writer.flush();
                                         }
                                         else {
-                                            writer.write_all(crypt("MMDB/0.1.0/SERVER DISCONNECT -DISCONNECT- /UNABLE TO PARSE CONNECTION".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("Password".into()).unwrap()).to_string()).as_bytes());
+                                            writer.write_all(crypt("MMDB/0.1.0/SERVER DISCONNECT -DISCONNECT- /UNABLE TO PARSE CONNECTION".to_string(),((&mut * (&mut * databases.lock().unwrap()).in_cell).get("PASSWORD".into()).unwrap()).to_string()).as_bytes());
                                             writer.flush();
                                             break;
                                         }
